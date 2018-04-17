@@ -1,14 +1,25 @@
-from flask import Flask, session, redirect, url_for, escape, request
+from flask import Flask, session, redirect, url_for, request
+import glob
+import os
 
 app = Flask(__name__)
+app.debug = True
 video_path = 'A:/su/cutresults/'
+videos = None
+videos_name = None
 
 @app.route('/')
 def index():
-    if 'username' in session:
-        return 'Logged in as %s' % escape(session['username'])
-    return 'You are not logged in'
-
+    expansion = 'flv'
+    videos = glob.glob(video_path + "/*." + expansion)
+    videos_name = []
+    content = ''
+    for v in videos:
+        name = os.path.basename(v)
+        filename, file_extension = os.path.splitext(name)
+        content += '<li><a href="/%s">%s</a></li>' %(filename, filename)
+        videos_name.append(filename)
+    return '<ol>' + content + '</ol>'
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
