@@ -10,14 +10,89 @@
 
 <body>
     <link rel="stylesheet" href="static/DPlayer.min.css">
-    <h1>video/{{ name }}</h1>
     <h1>{{ name }}</h1>
     <div id="dplayer"></div>
+    <div>
+        <form action="" method="get">
+            arousal
+            <label>
+                <input name="zero" type="radio" value="" />0 </label>
+            <label>
+                <input name="one" type="radio" value="" />1 </label>
+            <label>
+                <input name="two" type="radio" value="" />2 </label>
+        </form>
+        <form action="" method="get">
+            excitement
+            <label>
+                <input name="zero" type="radio" value="" />0 </label>
+            <label>
+                <input name="one" type="radio" value="" />1 </label>
+            <label>
+                <input name="two" type="radio" value="" />2 </label>
+        </form>
+        <form action="" method="get">
+            pleasure
+            <label>
+                <input name="zero" type="radio" value="" />0 </label>
+            <label>
+                <input name="one" type="radio" value="" />1 </label>
+            <label>
+                <input name="two" type="radio" value="" />2 </label>
+        </form>
+        <form action="" method="get">
+            contentment
+            <label>
+                <input name="zero" type="radio" value="" />0 </label>
+            <label>
+                <input name="one" type="radio" value="" />1 </label>
+            <label>
+                <input name="two" type="radio" value="" />2 </label>
+        </form>
+        <form action="" method="get">
+            sleepiness
+            <label>
+                <input name="zero" type="radio" value="" />0 </label>
+            <label>
+                <input name="one" type="radio" value="" />1 </label>
+            <label>
+                <input name="two" type="radio" value="" />2 </label>
+        </form>
+        <form action="" method="get">
+            depression
+            <label>
+                <input name="zero" type="radio" value="" />0 </label>
+            <label>
+                <input name="one" type="radio" value="" />1 </label>
+            <label>
+                <input name="two" type="radio" value="" />2 </label>
+        </form>
+        <form action="" method="get">
+            misery
+            <label>
+                <input name="zero" type="radio" value="" />0 </label>
+            <label>
+                <input name="one" type="radio" value="" />1 </label>
+            <label>
+                <input name="two" type="radio" value="" />2 </label>
+        </form>
+        <form action="" method="get">
+            distress
+            <label>
+                <input name="zero" type="radio" value="" />0 </label>
+            <label>
+                <input name="one" type="radio" value="" />1 </label>
+            <label>
+                <input name="two" type="radio" value="" />2 </label>
+        </form>
+        <input type="submit" value="Next" href="javascript: submitform()">
+    </div>
     <script src="static/flv.min.js"></script>
     <script src="static/DPlayer.min.js"></script>
     <script>
         const dp = new DPlayer({
             container: document.getElementById('dplayer'),
+            autoplay: true,
             video: {
                 url: 'video/{{ name }}',
                 type: 'flv'
@@ -27,6 +102,10 @@
                 api: 'https://api.prprpr.me/dplayer/'
             }
         });
+
+        function submitform() {
+
+        }
     </script>
 </body>
 
