@@ -13,7 +13,7 @@
     <h1>{{ name }}</h1>
     <div id="dplayer"></div>
     <div>
-        <form action="" method="get">
+        <form name="arousalForm" action="" method="get">
             arousal
             <label>
                 <input name="zero" type="radio" value="" />0 </label>
@@ -22,7 +22,7 @@
             <label>
                 <input name="two" type="radio" value="" />2 </label>
         </form>
-        <form action="" method="get">
+        <form name="excitementForm" action="" method="get">
             excitement
             <label>
                 <input name="zero" type="radio" value="" />0 </label>
@@ -31,7 +31,7 @@
             <label>
                 <input name="two" type="radio" value="" />2 </label>
         </form>
-        <form action="" method="get">
+        <form name="pleasureForm" action="" method="get">
             pleasure
             <label>
                 <input name="zero" type="radio" value="" />0 </label>
@@ -40,7 +40,7 @@
             <label>
                 <input name="two" type="radio" value="" />2 </label>
         </form>
-        <form action="" method="get">
+        <form name="contentmentForm" action="" method="get">
             contentment
             <label>
                 <input name="zero" type="radio" value="" />0 </label>
@@ -49,7 +49,7 @@
             <label>
                 <input name="two" type="radio" value="" />2 </label>
         </form>
-        <form action="" method="get">
+        <form name="sleepinessForm" action="" method="get">
             sleepiness
             <label>
                 <input name="zero" type="radio" value="" />0 </label>
@@ -58,7 +58,7 @@
             <label>
                 <input name="two" type="radio" value="" />2 </label>
         </form>
-        <form action="" method="get">
+        <form name="depressionForm" action="" method="get">
             depression
             <label>
                 <input name="zero" type="radio" value="" />0 </label>
@@ -67,7 +67,7 @@
             <label>
                 <input name="two" type="radio" value="" />2 </label>
         </form>
-        <form action="" method="get">
+        <form name="miseryForm" action="" method="get">
             misery
             <label>
                 <input name="zero" type="radio" value="" />0 </label>
@@ -76,7 +76,7 @@
             <label>
                 <input name="two" type="radio" value="" />2 </label>
         </form>
-        <form action="" method="get">
+        <form name="distressForm" action="" method="get">
             distress
             <label>
                 <input name="zero" type="radio" value="" />0 </label>
@@ -104,7 +104,7 @@
         });
 
         function submitform() {
-
+            document.getElementById("myForm").submit();
         }
     </script>
 </body>
