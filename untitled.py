@@ -4,7 +4,10 @@ import os
 
 app = Flask(__name__)
 app.debug = True
-video_path = 'A:/su/cutresults/'
+# windows
+# video_path = 'A:/su/cutresults/'
+# mac
+video_path = '/Users/young/Movies/'
 expansion = 'flv'
 videos = glob.glob(video_path + "/*." + expansion)
 videos_name = []
