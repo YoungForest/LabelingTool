@@ -11,11 +11,11 @@
 
     <div id="dplayer"></div>
     <div>
-        <form name="emotionForm" action="{{ url_for('submit_label') }}" method="post">
+        <form id="emotionForm" action="{{ url_for('submit_label') }}" method="post">
         <div>
             arousal
             <label>
-                <input name="arousal" type="radio" value="0" checked="checked"/>0 </label>
+                <input name="arousal" type="radio" value="0" />0 </label>
             <label>
                 <input name="arousal" type="radio" value="1" />1 </label>
             <label>
@@ -24,7 +24,7 @@
         <div>
             excitement
             <label>
-                <input name="excitement" type="radio" value="0" checked="checked"/>0 </label>
+                <input name="excitement" type="radio" value="0" />0 </label>
             <label>
                 <input name="excitement" type="radio" value="1" />1 </label>
             <label>
@@ -33,7 +33,7 @@
         <div>
             pleasure
             <label>
-                <input name="pleasure" type="radio" value="0" checked="checked"/>0 </label>
+                <input name="pleasure" type="radio" value="0" />0 </label>
             <label>
                 <input name="pleasure" type="radio" value="1" />1 </label>
             <label>
@@ -42,7 +42,7 @@
         <div>
             contentment
             <label>
-                <input name="contentment" type="radio" value="0" checked="checked"/>0 </label>
+                <input name="contentment" type="radio" value="0" />0 </label>
             <label>
                 <input name="contentment" type="radio" value="1" />1 </label>
             <label>
@@ -51,7 +51,7 @@
         <div>
             sleepiness
             <label>
-                <input name="sleepiness" type="radio" value="0" checked="checked"/>0 </label>
+                <input name="sleepiness" type="radio" value="0" />0 </label>
             <label>
                 <input name="sleepiness" type="radio" value="1" />1 </label>
             <label>
@@ -60,7 +60,7 @@
         <div>
             depression
             <label>
-                <input name="depression" type="radio" value="0" checked="checked"/>0 </label>
+                <input name="depression" type="radio" value="0" />0 </label>
             <label>
                 <input name="depression" type="radio" value="1" />1 </label>
             <label>
@@ -69,7 +69,7 @@
         <div>
             misery
             <label>
-                <input name="misery" type="radio" value="0" checked="checked"/>0 </label>
+                <input name="misery" type="radio" value="0" />0 </label>
             <label>
                 <input name="misery" type="radio" value="1" />1 </label>
             <label>
@@ -78,19 +78,23 @@
         <div>
             distress
             <label>
-                <input name="distress" type="radio" value="0" checked="checked"/>0 </label>
+                <input name="distress" type="radio" value="0" />0 </label>
             <label>
                 <input name="distress" type="radio" value="1" />1 </label>
             <label>
                 <input name="distress" type="radio" value="2" />2 </label>
         </div>
-        <div class="submit">
-            <input type="submit" value="Submit" name="submitToSql" href="javascript: submitform()">
-            <input type="submit" value="Next" name="nextVideo" href="javascript: labelingNextVideo()">
-        </div>
             <!--隐藏的input,设置视频name-->
         <input type="hidden" name="video_name" value="{{ name }}">
         </form>
+        <div class="submit">
+            <input type="submit" value="Submit" id="submitToSql" onclick="submitForm()">
+            <input type="submit" value="Next" id="nextVideo" onclick="labelingNextVideo()">
+        </div>
+        <div style="margin-top: 16px"></div>
+        {% for message in get_flashed_messages() %}
+            <div class=flash>{{ message }}</div>
+        {% endfor %}
     </div>
     <script src="static/flv.min.js"></script>
     <script src="static/DPlayer.min.js"></script>
@@ -108,12 +112,31 @@
             }
         });
 
-        function submitform() {
-            var submitToSql = document.getElementsByName("submitToSql");
-            submitToSql.disabled = true;//提交后禁用,防止再没submit时重复多次点击
-            var myForm = document.getElementsByName("emotionForm");
+        //加载进来立刻执行,预设radio值
+        window.onload = function (ev) {
+            var arousal = document.getElementsByName("arousal");
+            var excitement = document.getElementsByName("excitement");
+            var pleasure = document.getElementsByName("pleasure");
+            var contentment = document.getElementsByName("contentment");
+            var sleepiness = document.getElementsByName("sleepiness");
+            var depression = document.getElementsByName("depression");
+            var misery = document.getElementsByName("misery");
+            var distress = document.getElementsByName("distress");
+            arousal[{{ arousal_level }}].checked = true;
+            excitement[{{ excitement_level }}].checked = true;
+            pleasure[{{ pleasure_level }}].checked = true;
+            contentment[{{ contentment_level }}].checked = true;
+            sleepiness[{{ sleepiness_level }}].checked = true;
+            depression[{{ depression_level }}].checked = true;
+            misery[{{ misery_level }}].checked = true;
+            distress[{{ distress_level }}].checked = true;
+        };
+
+        function submitForm() {
+            var myForm = document.getElementById("emotionForm");
             myForm.submit();
         }
+
         
         function labelingNextVideo() {
             

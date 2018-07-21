@@ -44,6 +44,28 @@ def get_db():
     return g.sqlite_db
 
 
+# search sqlite(video_name need expansion)
+def search_data(video_path, video_name):
+    radio_dict = {'arousal_level': 0, 'excitement_level': 0, 'pleasure_level': 0,
+                  'contentment_level': 0, 'sleepiness_level': 0, 'depression_level': 0,
+                  'misery_level': 0, 'distress_level': 0}
+    cursor = g.db.execute("select arousal_level,excitement_level,pleasure_level,contentment_level,sleepiness_level,"
+                          "depression_level,misery_level,distress_level from label_set where video_path='%s' and "
+                          "video_name='%s'" % (video_path, video_name))
+
+    for row in cursor:
+        radio_dict['arousal_level'] = row[0]
+        radio_dict['excitement_level'] = row[1]
+        radio_dict['pleasure_level'] = row[2]
+        radio_dict['contentment_level'] = row[3]
+        radio_dict['sleepiness_level'] = row[4]
+        radio_dict['depression_level'] = row[5]
+        radio_dict['misery_level'] = row[6]
+        radio_dict['distress_level'] = row[7]
+
+    return radio_dict
+
+
 @app.teardown_appcontext
 def close_db(error):
     """Closes the database again at the end of the request."""
@@ -73,7 +95,15 @@ def index():
 @app.route('/<name>')
 def label_page(name=None):
     # 扩展:如果此视频已经被标注,先获取相应的值,预设radio
-    return render_template('index.html', name=name)
+    radio_dict = search_data(video_path, name+'.'+expansion)
+    return render_template('index.html', name=name, arousal_level=radio_dict['arousal_level'],
+                           excitement_level=radio_dict['excitement_level'],
+                           pleasure_level=radio_dict['pleasure_level'],
+                           contentment_level=radio_dict['contentment_level'],
+                           sleepiness_level=radio_dict['sleepiness_level'],
+                           depression_level=radio_dict['depression_level'],
+                           misery_level=radio_dict['misery_level'],
+                           distress_level=radio_dict['distress_level'])
 
 
 @app.route('/video/<name>')
@@ -111,13 +141,20 @@ def logout():
 def submit_label():
     g.db.execute("insert into label_set(video_path,video_name,arousal_level,excitement_level, \
             pleasure_level,contentment_level,sleepiness_level,depression_level,misery_level,distress_level)\
-            values(?,?,?,?,?,?,?,?,?,?)", [session['video_path'], request.form['video_name'], int(request.form['arousal']),
+            values(?,?,?,?,?,?,?,?,?,?)", [session['video_path'], request.form['video_name']+'.'+expansion, int(request.form['arousal']),
                  int(request.form['excitement']), int(request.form['pleasure']), int(request.form['contentment']),
                  int(request.form['sleepiness']), int(request.form['depression']), int(request.form['misery']),
                  int(request.form['distress'])])
     g.db.commit()
-
-    return '<script>window.history.go(-1);</script>'
+    flash("Successfully Insert Or Update!")
+    return render_template("index.html", name=request.form['video_name'], arousal_level=int(request.form['arousal']),
+                           excitement_level=int(request.form['excitement']),
+                           pleasure_level=int(request.form['pleasure']),
+                           contentment_level=int(request.form['contentment']),
+                           sleepiness_level=int(request.form['sleepiness']),
+                           depression_level=int(request.form['depression']),
+                           misery_level=int(request.form['misery']),
+                           distress_level=int(request.form['distress']))
 
 
 if __name__ == '__main__':
