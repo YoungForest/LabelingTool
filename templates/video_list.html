@@ -1,0 +1,11 @@
+{% extends "layout.html" %}
+{% block body %}
+    <h2>Video List</h2>
+    <a class="logout" href="{{ url_for('logout') }} ">Logout</a>
+    <p style="clear:both;"></p>
+    <ol>
+    {% for name in videos_name %}
+        <li><a href="/{{ name }}">{{ name }}</a></li>
+    {% endfor %}
+    </ol>
+{% endblock %}

@@ -1,91 +1,96 @@
-<!DOCTYPE html>
-<html lang="en">
+{% extends "layout.html" %}
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Labeling Website</title>
-</head>
-
-<body>
+{% block body %}
+    <link rel="stylesheet" href="static/style.css">
     <link rel="stylesheet" href="static/DPlayer.min.css">
-    <h1>{{ name }}</h1>
+
+    <h2>{{ name }}</h2>
+
+    <a class="logout" href="{{ url_for('logout') }} ">Logout</a>
+    <p style="clear:both;"></p>
+
     <div id="dplayer"></div>
     <div>
-        <form name="arousalForm" action="" method="get">
+        <form name="emotionForm" action="{{ url_for('submit_label') }}" method="post">
+        <div>
             arousal
             <label>
-                <input name="zero" type="radio" value="" />0 </label>
+                <input name="arousal" type="radio" value="0" checked="checked"/>0 </label>
             <label>
-                <input name="one" type="radio" value="" />1 </label>
+                <input name="arousal" type="radio" value="1" />1 </label>
             <label>
-                <input name="two" type="radio" value="" />2 </label>
-        </form>
-        <form name="excitementForm" action="" method="get">
+                <input name="arousal" type="radio" value="2" />2 </label>
+        </div>
+        <div>
             excitement
             <label>
-                <input name="zero" type="radio" value="" />0 </label>
+                <input name="excitement" type="radio" value="0" checked="checked"/>0 </label>
             <label>
-                <input name="one" type="radio" value="" />1 </label>
+                <input name="excitement" type="radio" value="1" />1 </label>
             <label>
-                <input name="two" type="radio" value="" />2 </label>
-        </form>
-        <form name="pleasureForm" action="" method="get">
+                <input name="excitement" type="radio" value="2" />2 </label>
+        </div>
+        <div>
             pleasure
             <label>
-                <input name="zero" type="radio" value="" />0 </label>
+                <input name="pleasure" type="radio" value="0" checked="checked"/>0 </label>
             <label>
-                <input name="one" type="radio" value="" />1 </label>
+                <input name="pleasure" type="radio" value="1" />1 </label>
             <label>
-                <input name="two" type="radio" value="" />2 </label>
-        </form>
-        <form name="contentmentForm" action="" method="get">
+                <input name="pleasure" type="radio" value="2" />2 </label>
+        </div>
+        <div>
             contentment
             <label>
-                <input name="zero" type="radio" value="" />0 </label>
+                <input name="contentment" type="radio" value="0" checked="checked"/>0 </label>
             <label>
-                <input name="one" type="radio" value="" />1 </label>
+                <input name="contentment" type="radio" value="1" />1 </label>
             <label>
-                <input name="two" type="radio" value="" />2 </label>
-        </form>
-        <form name="sleepinessForm" action="" method="get">
+                <input name="contentment" type="radio" value="2" />2 </label>
+        </div>
+        <div>
             sleepiness
             <label>
-                <input name="zero" type="radio" value="" />0 </label>
+                <input name="sleepiness" type="radio" value="0" checked="checked"/>0 </label>
             <label>
-                <input name="one" type="radio" value="" />1 </label>
+                <input name="sleepiness" type="radio" value="1" />1 </label>
             <label>
-                <input name="two" type="radio" value="" />2 </label>
-        </form>
-        <form name="depressionForm" action="" method="get">
+                <input name="sleepiness" type="radio" value="2" />2 </label>
+        </div>
+        <div>
             depression
             <label>
-                <input name="zero" type="radio" value="" />0 </label>
+                <input name="depression" type="radio" value="0" checked="checked"/>0 </label>
             <label>
-                <input name="one" type="radio" value="" />1 </label>
+                <input name="depression" type="radio" value="1" />1 </label>
             <label>
-                <input name="two" type="radio" value="" />2 </label>
-        </form>
-        <form name="miseryForm" action="" method="get">
+                <input name="depression" type="radio" value="2" />2 </label>
+        </div>
+        <div>
             misery
             <label>
-                <input name="zero" type="radio" value="" />0 </label>
+                <input name="misery" type="radio" value="0" checked="checked"/>0 </label>
             <label>
-                <input name="one" type="radio" value="" />1 </label>
+                <input name="misery" type="radio" value="1" />1 </label>
             <label>
-                <input name="two" type="radio" value="" />2 </label>
-        </form>
-        <form name="distressForm" action="" method="get">
+                <input name="misery" type="radio" value="2" />2 </label>
+        </div>
+        <div>
             distress
             <label>
-                <input name="zero" type="radio" value="" />0 </label>
+                <input name="distress" type="radio" value="0" checked="checked"/>0 </label>
             <label>
-                <input name="one" type="radio" value="" />1 </label>
+                <input name="distress" type="radio" value="1" />1 </label>
             <label>
-                <input name="two" type="radio" value="" />2 </label>
+                <input name="distress" type="radio" value="2" />2 </label>
+        </div>
+        <div class="submit">
+            <input type="submit" value="Submit" name="submitToSql" href="javascript: submitform()">
+            <input type="submit" value="Next" name="nextVideo" href="javascript: labelingNextVideo()">
+        </div>
+            <!--隐藏的input,设置视频name-->
+        <input type="hidden" name="video_name" value="{{ name }}">
         </form>
-        <input type="submit" value="Next" href="javascript: submitform()">
     </div>
     <script src="static/flv.min.js"></script>
     <script src="static/DPlayer.min.js"></script>
@@ -104,9 +109,18 @@
         });
 
         function submitform() {
-            document.getElementById("myForm").submit();
+            var submitToSql = document.getElementsByName("submitToSql");
+            submitToSql.disabled = true;//提交后禁用,防止再没submit时重复多次点击
+            var myForm = document.getElementsByName("emotionForm");
+            myForm.submit();
+        }
+        
+        function labelingNextVideo() {
+            
+        }
+
+        function labelingPreVideo() {
+
         }
     </script>
-</body>
-
-</html>
+{% endblock %}
