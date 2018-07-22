@@ -84,11 +84,14 @@
             <label>
                 <input name="distress" type="radio" value="2" />2 </label>
         </div>
-            <!--隐藏的input,设置视频name-->
+            <!--隐藏的input,设置视频name,索引,列表长度-->
         <input type="hidden" name="video_name" value="{{ name }}">
+        <input type="hidden" name="video_list_index" value="{{ video_list_index }}">
+        <input type="hidden" name="video_list_length" value="{{ video_list_length }}">
         </form>
         <div class="submit">
             <input type="submit" value="Submit" id="submitToSql" onclick="submitForm()">
+            <input type="submit" value="Prev" id="preVideo" onclick="labelingPreVideo()">
             <input type="submit" value="Next" id="nextVideo" onclick="labelingNextVideo()">
         </div>
         <div style="margin-top: 16px"></div>
@@ -130,6 +133,22 @@
             depression[{{ depression_level }}].checked = true;
             misery[{{ misery_level }}].checked = true;
             distress[{{ distress_level }}].checked = true;
+
+            //针对上一个下一个按钮的控制
+            var i = {{ video_list_index }};
+            var j = {{ video_list_length }};
+            var prev = document.getElementById("preVideo");
+            var next = document.getElementById("nextVideo");
+
+            if(i === 0){
+                prev.disabled = true;
+            }
+
+            if(i === j-1){
+                next.disabled = true;
+            }
+
+
         };
 
         function submitForm() {
@@ -139,11 +158,11 @@
 
         
         function labelingNextVideo() {
-            
+            window.location.href = "{{ url_for('next_video', video_list_index=video_list_index, video_list_length=video_list_length) }}";
         }
 
         function labelingPreVideo() {
-
+            window.location.href = "{{ url_for('prev_video', video_list_index=video_list_index, video_list_length=video_list_length) }}";
         }
     </script>
 {% endblock %}

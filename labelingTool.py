@@ -92,6 +92,19 @@ def index():
 
 @app.route('/<name>')
 def label_page(name=None):
+    # 取出传递的request参数
+    video_list_index = 0
+    video_list_length = 0
+    if request.args.get('video_list_index') is not None:
+        video_list_index = int(request.args.get('video_list_index'))
+    elif session.get('video_list_index') is not None:
+        video_list_index = session.get('video_list_index')
+        session.pop('video_list_index')
+    if request.args.get('video_list_length') is not None:
+        video_list_length = int(request.args.get('video_list_length'))
+    elif session.get('video_list_length') is not None:
+        video_list_length = session.get('video_list_length')
+        session.pop('video_list_length')
     # 扩展:如果此视频已经被标注,先获取相应的值,预设radio
     radio_dict = search_data(video_path, name+'.'+expansion)
     if len(radio_dict) == 0:
@@ -105,7 +118,25 @@ def label_page(name=None):
                            sleepiness_level=radio_dict['sleepiness_level'],
                            depression_level=radio_dict['depression_level'],
                            misery_level=radio_dict['misery_level'],
-                           distress_level=radio_dict['distress_level'])
+                           distress_level=radio_dict['distress_level'],
+                           video_list_index=video_list_index,
+                           video_list_length=video_list_length)
+
+
+@app.route('/prev/<video_list_index>/<video_list_length>')
+def prev_video(video_list_index, video_list_length):
+    i = int(video_list_index)-1
+    session['video_list_index'] = i
+    session['video_list_length'] = int(video_list_length)
+    return redirect(url_for('label_page', name=videos_name[i]))
+
+
+@app.route('/next/<video_list_index>/<video_list_length>')
+def next_video(video_list_index, video_list_length):
+    i = int(video_list_index)+1
+    session['video_list_index'] = i
+    session['video_list_length'] = int(video_list_length)
+    return redirect(url_for('label_page', name=videos_name[i]))
 
 
 @app.route('/video/<name>')
@@ -143,7 +174,7 @@ def logout():
 def submit_label():
     # first do search
     radio_dict = search_data(session['video_path'], request.form['video_name']+'.'+expansion)
-    if len(radio_dict) == 0:
+    if len(radio_dict) != 0:
         g.db.execute("update label_set set arousal_level=%d, excitement_level=%d, pleasure_level=%d, "
                      "contentment_level=%d, sleepiness_level=%d, depression_level=%d, misery_level=%d,"
                      "distress_level=%d where video_path='%s' and video_name='%s'" %
@@ -168,7 +199,9 @@ def submit_label():
                            sleepiness_level=int(request.form['sleepiness']),
                            depression_level=int(request.form['depression']),
                            misery_level=int(request.form['misery']),
-                           distress_level=int(request.form['distress']))
+                           distress_level=int(request.form['distress']),
+                           video_list_index=int(request.form['video_list_index']),
+                           video_list_length=int(request.form['video_list_length']))
 
 
 if __name__ == '__main__':

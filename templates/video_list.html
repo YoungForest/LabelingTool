@@ -4,8 +4,9 @@
     <a class="logout" href="{{ url_for('logout') }} ">Logout</a>
     <p style="clear:both;"></p>
     <ol>
-    {% for name in videos_name %}
-        <li><a href="/{{ name }}">{{ name }}</a></li>
+    {% for i in range(0,videos_name|length) %}
+        <li><a href="/{{ videos_name[i] }}?video_list_index={{ i }}&video_list_length={{ videos_name|length }}">
+            {{ videos_name[i] }}</a></li>
     {% endfor %}
     </ol>
 {% endblock %}
