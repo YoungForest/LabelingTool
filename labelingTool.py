@@ -46,9 +46,7 @@ def get_db():
 
 # search sqlite(video_name need expansion)
 def search_data(video_path, video_name):
-    radio_dict = {'arousal_level': 0, 'excitement_level': 0, 'pleasure_level': 0,
-                  'contentment_level': 0, 'sleepiness_level': 0, 'depression_level': 0,
-                  'misery_level': 0, 'distress_level': 0}
+    radio_dict = {}
     cursor = g.db.execute("select arousal_level,excitement_level,pleasure_level,contentment_level,sleepiness_level,"
                           "depression_level,misery_level,distress_level from label_set where video_path='%s' and "
                           "video_name='%s'" % (video_path, video_name))
@@ -96,6 +94,10 @@ def index():
 def label_page(name=None):
     # 扩展:如果此视频已经被标注,先获取相应的值,预设radio
     radio_dict = search_data(video_path, name+'.'+expansion)
+    if len(radio_dict) == 0:
+        radio_dict = {'arousal_level': 0, 'excitement_level': 0, 'pleasure_level': 0,
+                      'contentment_level': 0, 'sleepiness_level': 0, 'depression_level': 0,
+                      'misery_level': 0, 'distress_level': 0}
     return render_template('index.html', name=name, arousal_level=radio_dict['arousal_level'],
                            excitement_level=radio_dict['excitement_level'],
                            pleasure_level=radio_dict['pleasure_level'],
@@ -139,12 +141,24 @@ def logout():
 # 标注的数据传递给数据库
 @app.route('/add', methods=['POST'])
 def submit_label():
-    g.db.execute("insert into label_set(video_path,video_name,arousal_level,excitement_level, \
-            pleasure_level,contentment_level,sleepiness_level,depression_level,misery_level,distress_level)\
-            values(?,?,?,?,?,?,?,?,?,?)", [session['video_path'], request.form['video_name']+'.'+expansion, int(request.form['arousal']),
-                 int(request.form['excitement']), int(request.form['pleasure']), int(request.form['contentment']),
-                 int(request.form['sleepiness']), int(request.form['depression']), int(request.form['misery']),
-                 int(request.form['distress'])])
+    # first do search
+    radio_dict = search_data(session['video_path'], request.form['video_name']+'.'+expansion)
+    if len(radio_dict) == 0:
+        g.db.execute("update label_set set arousal_level=%d, excitement_level=%d, pleasure_level=%d, "
+                     "contentment_level=%d, sleepiness_level=%d, depression_level=%d, misery_level=%d,"
+                     "distress_level=%d where video_path='%s' and video_name='%s'" %
+                     (int(request.form['arousal']), int(request.form['excitement']), int(request.form['pleasure']),
+                      int(request.form['contentment']), int(request.form['sleepiness']), int(request.form['depression']),
+                      int(request.form['misery']), int(request.form['distress']), session['video_path'],
+                      request.form['video_name']+'.'+expansion))
+    else:
+        g.db.execute("insert into label_set(video_path,video_name,arousal_level,excitement_level,"
+                     "pleasure_level,contentment_level,sleepiness_level,depression_level,misery_level,distress_level)"
+                     "values(?,?,?,?,?,?,?,?,?,?)", [session['video_path'], request.form['video_name']+'.'+expansion,
+                                                     int(request.form['arousal']), int(request.form['excitement']),
+                                                     int(request.form['pleasure']), int(request.form['contentment']),
+                                                     int(request.form['sleepiness']), int(request.form['depression']),
+                                                     int(request.form['misery']), int(request.form['distress'])])
     g.db.commit()
     flash("Successfully Insert Or Update!")
     return render_template("index.html", name=request.form['video_name'], arousal_level=int(request.form['arousal']),
