@@ -84,4 +84,18 @@ input[type=submit]{
     text-align:center;
 }
 
+input:-ms-input-placeholder{color:#d7d7d7;}/* Internet Explorer 10+ */
+input::-webkit-input-placeholder{color:#d7d7d7;}/* WebKit browsers */
+input::-moz-placeholder{color:#d7d7d7;}/* Mozilla Firefox 4 to 18 */
+input:-moz-placeholder{color:#d7d7d7;}/* Mozilla Firefox 19+ */
+
+.dirFormatInfo{
+    font-size:11px;
+    margin-top:-5px;
+    margin-right:4em;
+    font-style:italic;
+    font-family: 'Times New Roman', serif;
+    color:#144d0fed;
+}
+
 

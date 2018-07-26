@@ -8,24 +8,38 @@
 
     <form action="{{ url_for('input_video_dir') }}" method="post" id="inputForm">
         <p class="inputDirTitle">Directory:</p>
-        <input name="video_dir" class="dirInput" type="text">
+        <input id="dirInput" name="video_dir" class="dirInput" type="text" placeholder="Enter Absolute Path">
         <p style="clear: both"></p>
     </form>
+    <div style="text-align: center">
+        <p class="dirFormatInfo">Format:  C:/Users/xxx/Videos or D:\Videos\happy\</p>
+    </div>
     <div style="text-align: center">
         <input type="submit" value="Ensure" onclick="doCheckAndSubmit()">
     </div>
     <script>
         function doCheckAndSubmit() {
-            var input = document.getElementById("inputForm");
+            var form = document.getElementById("inputForm");
+            var input = document.getElementById("dirInput");
             var ok = true;
 
             //检查输入的是否是路径格式
+            var str = input.value;
+            if(str === null || str.replace(/\s/g,"") === "")
+                ok = false;
 
             if(ok)
-                input.submit();
+                form.submit();
             else
                 alert("Path format is not illegal!\n Please input the directory again.");
         }
+
+        window.onload = function (ev) {
+            var input = document.getElementById("dirInput");
+            input.value = "{{ dir }}";
+        };
+
+
     </script>
 {% endblock %}
 

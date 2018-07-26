@@ -24,13 +24,16 @@ name2path = {}  # 视频名:路径
 # 根据选择的文件夹名匹配以extension结尾的视频名(不包含深层次递归子文件夹)
 def get_local_all_videos(directory):
     global video_path
-    video_path = directory
+    video_path = directory.replace('\\', '/')
+    if video_path[len(video_path)-1] == '/':
+        video_path = video_path[:len(video_path)-1]
+    session['video_path'] = video_path
     videos = glob.glob(video_path + "/*." + expansion)  # 获得所有视频的绝对路径名
     for v in videos:
         name = os.path.basename(v)
         filename, file_extension = os.path.splitext(name)
         videos_name.append(filename)
-        name2path[filename] = v.replace('\\', '/')
+        name2path[filename] = v
 
 
 # 数据库连接
@@ -168,7 +171,6 @@ def login():
             error = 'Invalid password'
         else:
             session['logged_in'] = True
-            session['video_path'] = video_path
             flash('You were logged in')
             return render_template("input_dir.html", dir=video_path)
     return render_template('login.html', error=error)
