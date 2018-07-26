@@ -15,16 +15,22 @@ app.config.from_object(__name__)
 
 # windows
 # mac
-video_path = u'F:/视频/视频标注测试集'
+video_path = ""  # 初始值设为空串
 expansion = 'flv'
-videos = glob.glob(video_path + "/*." + expansion)  # 获得所有视频的绝对路径名
 videos_name = []
 name2path = {}  # 视频名:路径
-for v in videos:
-    name = os.path.basename(v)
-    filename, file_extension = os.path.splitext(name)
-    videos_name.append(filename)
-    name2path[filename] = v.replace('\\', '/')
+
+
+# 根据选择的文件夹名匹配以extension结尾的视频名(不包含深层次递归子文件夹)
+def get_local_all_videos(directory):
+    global video_path
+    video_path = directory
+    videos = glob.glob(video_path + "/*." + expansion)  # 获得所有视频的绝对路径名
+    for v in videos:
+        name = os.path.basename(v)
+        filename, file_extension = os.path.splitext(name)
+        videos_name.append(filename)
+        name2path[filename] = v.replace('\\', '/')
 
 
 # 数据库连接
@@ -146,6 +152,12 @@ def video_file_server(name=None):
     return resp
 
 
+@app.route('/input', methods=['POST'])
+def input_video_dir():
+    get_local_all_videos(request.form['video_dir'])
+    return render_template("video_list.html", videos_name=videos_name)
+
+
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     error = None
@@ -158,7 +170,7 @@ def login():
             session['logged_in'] = True
             session['video_path'] = video_path
             flash('You were logged in')
-            return render_template("video_list.html", videos_name=videos_name)
+            return render_template("input_dir.html", dir=video_path)
     return render_template('login.html', error=error)
 
 

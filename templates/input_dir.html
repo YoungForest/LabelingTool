@@ -1,0 +1,31 @@
+{% extends "layout.html" %}
+{% block body %}
+    <link rel="stylesheet" href="static/style.css">
+    <h2>Please Enter Video Directory</h2>
+
+    <a class="logout" href="{{ url_for('logout') }} ">Logout</a>
+    <p style="clear:both;"></p>
+
+    <form action="{{ url_for('input_video_dir') }}" method="post" id="inputForm">
+        <p class="inputDirTitle">Directory:</p>
+        <input name="video_dir" class="dirInput" type="text">
+        <p style="clear: both"></p>
+    </form>
+    <div style="text-align: center">
+        <input type="submit" value="Ensure" onclick="doCheckAndSubmit()">
+    </div>
+    <script>
+        function doCheckAndSubmit() {
+            var input = document.getElementById("inputForm");
+            var ok = true;
+
+            //检查输入的是否是路径格式
+
+            if(ok)
+                input.submit();
+            else
+                alert("Path format is not illegal!\n Please input the directory again.");
+        }
+    </script>
+{% endblock %}
+

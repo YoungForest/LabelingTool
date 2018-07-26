@@ -58,4 +58,30 @@ input[type=submit]{
     margin-right:20px;
 }
 
+.inputDirTitle{
+    font-size: 20px;
+    font-weight: bolder;
+    font-style: italic;
+    font-family: 'Times New Roman', serif;
+    color: #92320f;
+    margin-left: 1.5em;
+    float: left;
+}
+
+.dirInput{
+    float: left;
+    font-size: 20px;
+    margin-top:0.88em;
+    margin-left:2em;
+    font-family:'楷体','serif','Times New Roman';
+    color:#042c49;
+    width:300px;
+    height:25px;
+    box-shadow: 0 0 10px 0 #f95d5d;
+    outline: 0;
+    border: 1px solid #f9c75d;
+    border-radius:6px;
+    text-align:center;
+}
+
 
